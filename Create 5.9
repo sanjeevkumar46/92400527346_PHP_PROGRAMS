@@ -1,0 +1,128 @@
+<?php
+
+// Handle AJAX request
+if (isset($_GET['search'])) {
+
+    $search = strtolower($_GET['search']);
+
+    $items = [
+        "Apple",
+        "Android",
+        "Amazon",
+        "Google",
+        "Facebook",
+        "Instagram",
+        "Java",
+        "JavaScript",
+        "PHP",
+        "Python",
+        "HTML",
+        "CSS",
+        "MySQL",
+        "jQuery"
+    ];
+
+    foreach ($items as $item) {
+
+        if ($search != "" && strpos(strtolower($item), $search) !== false) {
+
+            echo "<div class='suggestion'>" .
+                 htmlspecialchars($item) .
+                 "</div>";
+        }
+    }
+
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Search Suggestions Using jQuery</title>
+
+    <!-- jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            padding: 50px;
+        }
+
+        #search {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        #suggestions {
+            width: 320px;
+        }
+
+        .suggestion {
+            padding: 10px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        .suggestion:hover {
+            background-color: #eee;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h2>Search Suggestions</h2>
+
+    <input type="text"
+           id="search"
+           placeholder="Type something...">
+
+    <div id="suggestions"></div>
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#search").keyup(function () {
+
+                var searchText = $(this).val();
+
+                if (searchText == "") {
+                    $("#suggestions").html("");
+                    return;
+                }
+
+                // AJAX request
+                $.ajax({
+
+                    url: "index.php",
+
+                    type: "GET",
+
+                    data: {
+                        search: searchText
+                    },
+
+                    success: function (response) {
+
+                        $("#suggestions").html(response);
+
+                    }
+
+                });
+
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>
